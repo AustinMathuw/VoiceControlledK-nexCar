@@ -1,0 +1,54 @@
+{ 
+   "intents": [ 
+		{
+			"intent": "CarControlIntent",
+			"slots": [
+				{
+					"name": "Direction",
+					"type": "LIST_OF_DIRECTIONS"
+				},
+				{
+					"name": "Speed",
+					"type": "LIST_OF_SPEEDS"
+				},
+				{
+					"name": "Turn",
+					"type": "LIST_OF_TURNS"
+				}
+			]
+		},
+		{
+			"intent": "CarLightColorIntent",
+			"slots": [
+				{
+					"name": "Color",
+					"type": "LIST_OF_COLORS"
+				}
+			]
+		},
+		{
+			"intent": "StopCarIntent"
+		},
+		{
+			"intent": "SupportedSpeedsIntent"
+		},
+		{
+			"intent": "SupportedDirectionsIntent"
+		},
+     	{
+			"intent": "SupportedTurnsIntent"
+		},
+		{
+			"intent": "SupportedColorsIntent"
+		},
+		{
+			"intent": "AMAZON.HelpIntent"
+		}, 
+		{ 
+			"intent": "AMAZON.StopIntent" 
+		}, 
+		{ 
+			"intent": "AMAZON.CancelIntent" 
+		} 
+	] 
+ } 

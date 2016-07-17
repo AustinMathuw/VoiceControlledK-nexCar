@@ -1,0 +1,146 @@
+CarLightColorIntent change light color to {Color}
+CarLightColorIntent change the car's lights to {Color}
+CarLightColorIntent make the car's lights {Color}
+CarLightColorIntent change lights to {Color}
+
+
+CarControlIntent go {Direction}
+CarControlIntent drive the car {Direction}
+CarControlIntent make the car go {Direction}
+
+CarControlIntent turn {Turn}
+CarControlIntent turn car {Turn}
+CarControlIntent turn the car {Turn}
+
+CarControlIntent set speed to {Speed}
+CarControlIntent set car's speed to {Speed}
+CarControlIntent set the car's speed to {Speed}
+CarControlIntent change speed to {Speed}
+CarControlIntent change car's speed to {Speed}
+CarControlIntent change the car's speed to {Speed}
+
+
+StopCarIntent stop car
+StopCarIntent stop car now
+StopCarIntent make car stop
+StopCarIntent make car stop now
+StopCarIntent stop the car
+StopCarIntent stop the car now
+StopCarIntent make the car stop
+StopCarIntent make the car stop now
+
+
+SupportedSpeedsIntent supported speeds
+
+SupportedSpeedsIntent what are the supported speeds
+SupportedSpeedsIntent what are all the supported speeds
+SupportedSpeedsIntent what are all supported speeds
+
+SupportedSpeedsIntent tell me all the supported speeds
+SupportedSpeedsIntent tell me all supported speeds
+SupportedSpeedsIntent tell me the supported speeds
+
+SupportedSpeedsIntent list supported speeds
+SupportedSpeedsIntent list all supported speeds
+SupportedSpeedsIntent list me the supported speeds
+SupportedSpeedsIntent list me all supported speeds
+SupportedSpeedsIntent list me all the supported speeds
+SupportedSpeedsIntent list to me the supported speeds
+SupportedSpeedsIntent list to me all supported speeds
+SupportedSpeedsIntent list to me all the supported speeds
+
+SupportedSpeedsIntent give supported speeds
+SupportedSpeedsIntent give all supported speeds
+SupportedSpeedsIntent give me the supported speeds
+SupportedSpeedsIntent give me all supported speeds
+SupportedSpeedsIntent give me all the supported speeds
+SupportedSpeedsIntent give to me the supported speeds
+SupportedSpeedsIntent give to me all supported speeds
+SupportedSpeedsIntent give to me all the supported speeds
+
+
+SupportedDirectionsIntent supported directions
+
+SupportedDirectionsIntent what are the supported directions
+SupportedDirectionsIntent what are all the supported directions
+SupportedDirectionsIntent what are all supported directions
+
+SupportedDirectionsIntent tell me all the supported directions
+SupportedDirectionsIntent tell me all supported directions
+SupportedDirectionsIntent tell me the supported directions
+
+SupportedDirectionsIntent list supported directions
+SupportedDirectionsIntent list all supported directions
+SupportedDirectionsIntent list me the supported directions
+SupportedDirectionsIntent list me all supported directions
+SupportedDirectionsIntent list me all the supported directions
+SupportedDirectionsIntent list to me the supported directions
+SupportedDirectionsIntent list to me all supported directions
+SupportedDirectionsIntent list to me all the supported directions
+
+SupportedDirectionsIntent give supported directions
+SupportedDirectionsIntent give all supported directions
+SupportedDirectionsIntent give me the supported directions
+SupportedDirectionsIntent give me all supported directions
+SupportedDirectionsIntent give me all the supported directions
+SupportedDirectionsIntent give to me the supported directions
+SupportedDirectionsIntent give to me all supported directions
+SupportedDirectionsIntent give to me all the supported directions
+
+
+SupportedColorsIntent supported colors
+
+SupportedColorsIntent what are the supported colors
+SupportedColorsIntent what are all the supported colors
+SupportedColorsIntent what are all supported colors
+
+SupportedColorsIntent tell me all the supported colors
+SupportedColorsIntent tell me all supported colors
+SupportedColorsIntent tell me the supported colors
+
+SupportedColorsIntent list supported colors
+SupportedColorsIntent list all supported colors
+SupportedColorsIntent list me the supported colors
+SupportedColorsIntent list me all supported colors
+SupportedColorsIntent list me all the supported colors
+SupportedColorsIntent list to me the supported colors
+SupportedColorsIntent list to me all supported colors
+SupportedColorsIntent list to me all the supported colors
+
+SupportedColorsIntent give supported colors
+SupportedColorsIntent give all supported colors
+SupportedColorsIntent give me the supported colors
+SupportedColorsIntent give me all supported colors
+SupportedColorsIntent give me all the supported colors
+SupportedColorsIntent give to me the supported colors
+SupportedColorsIntent give to me all supported colors
+SupportedColorsIntent give to me all the supported colors
+
+
+SupportedTurnsIntent supported turns
+
+SupportedTurnsIntent what are the supported turns
+SupportedTurnsIntent what are all the supported turns
+SupportedTurnsIntent what are all supported turns
+
+SupportedTurnsIntent tell me all the supported turns
+SupportedTurnsIntent tell me all supported turns
+SupportedTurnsIntent tell me the supported turns
+
+SupportedTurnsIntent list supported turns
+SupportedTurnsIntent list all supported turns
+SupportedTurnsIntent list me the supported turns
+SupportedTurnsIntent list me all supported turns
+SupportedTurnsIntent list me all the supported turns
+SupportedTurnsIntent list to me the supported turns
+SupportedTurnsIntent list to me all supported turns
+SupportedTurnsIntent list to me all the supported turns
+
+SupportedTurnsIntent give supported turns
+SupportedTurnsIntent give all supported turns
+SupportedTurnsIntent give me the supported turns
+SupportedTurnsIntent give me all supported turns
+SupportedTurnsIntent give me all the supported turns
+SupportedTurnsIntent give to me the supported turns
+SupportedTurnsIntent give to me all supported turns
+SupportedTurnsIntent give to me all the supported turns
