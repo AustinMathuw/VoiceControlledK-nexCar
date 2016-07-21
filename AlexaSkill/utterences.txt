@@ -12,22 +12,21 @@ CarControlIntent turn {Turn}
 CarControlIntent turn car {Turn}
 CarControlIntent turn the car {Turn}
 
-CarControlIntent set speed to {Speed}
-CarControlIntent set car's speed to {Speed}
-CarControlIntent set the car's speed to {Speed}
-CarControlIntent change speed to {Speed}
-CarControlIntent change car's speed to {Speed}
-CarControlIntent change the car's speed to {Speed}
+
+GetSessionIDIntent my ID
+GetSessionIDIntent my session ID
+GetSessionIDIntent what is my ID
+GetSessionIDIntent what is my session ID
 
 
-StopCarIntent stop car
-StopCarIntent stop car now
-StopCarIntent make car stop
-StopCarIntent make car stop now
-StopCarIntent stop the car
-StopCarIntent stop the car now
-StopCarIntent make the car stop
-StopCarIntent make the car stop now
+StopCarIntent {stop} car
+StopCarIntent {stop} car now
+StopCarIntent make car {stop}
+StopCarIntent make car {stop} now
+StopCarIntent {stop} the car
+StopCarIntent {stop} the car now
+StopCarIntent make the car {stop}
+StopCarIntent make the car {stop} now
 
 
 SupportedSpeedsIntent supported speeds

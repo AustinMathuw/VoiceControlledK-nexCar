@@ -4,5 +4,4 @@ module.exports = { //light color list
 	"blue": "The car's lights are now blue",
 	"orange": "The car's lights are now orange",
 	"yellow ": "The car's lights are now yellow",
-	"white": "The car's lights are now white"
 };

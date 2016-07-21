@@ -5,12 +5,19 @@ Author: Austin Wilson (16)
 
 //Import assests
 var skillSetup = require('./skillSetup');
-var speeds = require('./speeds');
 var colors = require('./colors');
 var directions = require('./directions');
 var turns = require('./turns');
+var stops = require('./stop');
 
-var APP_ID = undefined; //OPTIONAL: replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
+//PubHub server infromation (This is how i send the information to the Raspberry Pi)
+var iotCloud = require("pubnub")({
+  ssl           : true,  // <- enable TLS Tunneling over TCP 
+  publish_key   : "pub-c-0ba1d27d-852a-4884-a4f7-007874c4c3c3",
+  subscribe_key : "sub-c-cbf2cabc-4ce9-11e6-a1d5-0619f8945a4f"
+});
+
+var APP_ID = undefined //'amzn1.echo-sdk-ams.app.6e1ee6be-a692-407e-8373-f978b7314f18'; //Points to my Alexa Skill
 
 var CarControl = function () {
     skillSetup.call(this, APP_ID);
@@ -23,17 +30,14 @@ CarControl.prototype.constructor = CarControl;
 CarControl.prototype.eventHandlers.onSessionStarted = function (sessionStartedRequest, session) {
     console.log("onSessionStarted requestId: " + sessionStartedRequest.requestId
         + ", sessionId: " + session.sessionId);
-    // any initialization logic goes here
 };
 
 CarControl.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
     console.log("onLaunch requestId: " + launchRequest.requestId + ", sessionId: " + session.sessionId);
-    handleWelcomeRequest(response);
+    handleWelcomeRequest(session, response); //Sends my skill's welcome information
 };
 
 CarControl.prototype.intentHandlers = {
-	
-	
 	//Set car's movement
     "CarControlIntent": function (intent, session, response) {
         // Determine if this is for Turn, for Direction, for Speed, or an error.
@@ -64,35 +68,26 @@ CarControl.prototype.intentHandlers = {
 					type: skillSetup.speechOutputType.PLAIN_TEXT
 				};
 				cardContent =  turn;
-				response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
+				//Here, I store the turn information into a message and I send it to PubHub.
+				var turnMessage = {
+						"type":"turn",
+                        "command":turnValue
+                    };
+                console.log(iotCloud.get_version());
+                iotCloud.publish({ //Publishes the turn message to my PubHub Device.
+                    channel   : "my_device",
+                    message   : turnMessage,
+                    callback  : function(e) { 
+                        console.log( "SUCCESS!", e ); 
+                        response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
+                        },
+                    error     : function(e) { 
+                        response.tellWithCard("Could not connect", "Raspberry Pi Car", "Could not connect");
+                        console.log( "FAILED! RETRY PUBLISH!", e ); }
+                });
 			} else { //Turn is not in list
 				speechOutput = {
 					speech: "I'm sorry, I cannot set the turn to that. For a list of valid turns, try, what are the available turns.",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				repromptOutput = {
-					speech: "What else can I help with?",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				response.ask(speechOutput, repromptOutput);
-			}
-        } else if (speedSlot && speedSlot.value) { //If speed
-			speedValue = speedSlot.value.toLowerCase();
-			speed = speeds[speedValue];
-			if (speed) { //If speed is in list
-				speechOutput = {
-					speech: speed, //Output the speed sentence from it's list.
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				repromptOutput = {
-					speech: "What else can I help with?",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				cardContent =  speed;
-				response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
-			} else { //Speed is not in list
-				speechOutput = {
-					speech: "I'm sorry, I cannot set the speed to that. For a list of valid speeds, try, what are the available speeds.",
 					type: skillSetup.speechOutputType.PLAIN_TEXT
 				};
 				repromptOutput = {
@@ -114,7 +109,23 @@ CarControl.prototype.intentHandlers = {
 					type: skillSetup.speechOutputType.PLAIN_TEXT
 				};
 				cardContent =  direction;
-				response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
+				//Here, I store the direction information into a message and I send it to PubHub.
+				var directionMessage = {
+						"type":"direction",
+                        "command":directionValue
+                    };
+                console.log(iotCloud.get_version());
+                iotCloud.publish({ //Publishes the direction message to my PubHub Device.
+                    channel   : "my_device",
+					message   : directionMessage,
+                    callback  : function(e) { 
+                        console.log( "SUCCESS!", e ); 
+                        response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
+                        },
+                    error     : function(e) { 
+                        response.tellWithCard("Could not connect", "Raspberry Pi Car", "Could not connect");
+                        console.log( "FAILED! RETRY PUBLISH!", e ); }
+                });
 			} else { //Direction is not in list
 				speechOutput = {
 					speech: "I'm sorry, I cannot set the direction to that. For a list of valid directions, try, what are the available directions.",
@@ -130,8 +141,6 @@ CarControl.prototype.intentHandlers = {
             handleNoSlotRequest(response);
         }
     },
-
-	
 	//Set car's lights color
     "CarLightColorIntent": function (intent, session, response) {
         // Determine if this is for Color or an error.
@@ -155,10 +164,26 @@ CarControl.prototype.intentHandlers = {
 					type: skillSetup.speechOutputType.PLAIN_TEXT
 				};
 				cardContent =  color;
-				response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
+				//Here, I store the color information into a message and I send it to PubHub.
+				var colorMessage = {
+						"type":"color",
+                        "command":colorValue
+                    };
+                console.log(iotCloud.get_version());
+                iotCloud.publish({ //Publishes the color message to my PubHub Device.
+                    channel   : "my_device",
+					message   : colorMessage,
+                    callback  : function(e) { 
+                        console.log( "SUCCESS!", e ); 
+                        response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
+                        },
+                    error     : function(e) { 
+                        response.tellWithCard("Could not connect", "Raspberry Pi Car", "Could not connect");
+                        console.log( "FAILED! RETRY PUBLISH!", e ); }
+                });
 			} else  { //Color is not in list
 				speechOutput = {
-					speech: "I'm sorry, I cannot set the car's lights  to that color. For a list of valid colors, try, what are the available colors.",
+					speech: "I'm sorry, I cannot set the car's lights to that. For a list of valid colors, try, what are the available colors.",
 					type: skillSetup.speechOutputType.PLAIN_TEXT
 				};
 				repromptOutput = {
@@ -173,7 +198,7 @@ CarControl.prototype.intentHandlers = {
     },
 	
 	"StopCarIntent": function (intent, session, response){
-		handleStopCarRequest(response); //Stop Car
+		handleStopCarRequest(intent, session, response); //Stop Car
 	},
 	
 	"SupportedDirectionsIntent": function (intent, session, response){
@@ -188,8 +213,8 @@ CarControl.prototype.intentHandlers = {
 		handleAvailableColorsRequest(response); //Available Colors
 	},
 	
-	"SupportedSpeedsIntent": function (intent, session, response){
-		handleAvailableSpeedsRequest(response); //Available Speeds
+	"GetSessionIDIntent": function (intent, session, response){
+		handleGetSessionIDRequest(session, response); //Get session id spoken
 	},
 
     "AMAZON.HelpIntent": function (intent, session, response) {
@@ -199,18 +224,25 @@ CarControl.prototype.intentHandlers = {
     "AMAZON.StopIntent": function (intent, session, response) { //End Program
         var speechOutput = "Goodbye";
         response.tell(speechOutput);
+		handleStopCarOnEndRequest(intent, session, response); //Stop Car
     },
 
     "AMAZON.CancelIntent": function (intent, session, response) { //End Program
         var speechOutput = "Goodbye";
-        response.tell(speechOutput);
+		response.tell(speechOutput);
+		handleStopCarOnEndRequest(intent, session, response); //Stop Car
     }
 };
 
-function handleWelcomeRequest(response) {
-	var repromptSpeech = "For instructions on what you can say, please say help me.";
-    var speechOutput = "Welcome to the Raspberry Pi voice controlled car. What would you like me to do? " + repromptSpeech;
-    response.ask(speechOutput, repromptSpeech);
+function handleWelcomeRequest(session, response) {
+	var repromptSpeech = "For more instructions, please say help me.";
+    var speechOutput = "Welcome to the Raspberry Pi voice controlled car. "
+		+ "Before we begin, please either refer to your alexa app for your session ID, or ask me for it. "
+		+ "You will need it to start the Raspberry Pi application. "
+		+ repromptSpeech + " What would you like me to do?";
+		cardTitle = "Welcome to the Raspberry Pi Voice Controled Car!";
+		cardContent = "Session ID = " + session.sessionId;
+    response.askWithCard(speechOutput, repromptSpeech, cardTitle, cardContent);
 }
 
 function handleHelpRequest(response) { //Help Function
@@ -227,8 +259,8 @@ function handleHelpRequest(response) { //Help Function
 		+ "If you want the car to stop, say something like, stop car. "
         + "If you want to exit, say exit. "
         + repromptSpeech;
-
-    response.ask(speechOutput, repromptSpeech);
+	var cardContent = speechOutput;
+    response.askWithCard(speechOutput, repromptOutput, "Instuctions for Raspberry Pi Car:", cardContent);
 }
 
 function handleNoSlotRequest(response) { //Runs when invalid motion or color is given
@@ -241,15 +273,72 @@ function handleNoSlotRequest(response) { //Runs when invalid motion or color is 
 		type: skillSetup.speechOutputType.PLAIN_TEXT
 	};
 	response.ask(speechOutput, repromptSpeech);
+	
 }
 
-function handleStopCarRequest(response){ //Stop car function
-	var repromptSpeech,
-		speechOutput;
+function handleStopCarRequest(intent, session, response){ //Stop car function
+	var stopSlot = intent.slots.stop,
+		stopValue,
+		stop,
+		repromptSpeech,
+		speechOutput,
+		cardTitle = "Car Stopped",
+		cardContent;
+
+	if (stopSlot && stopSlot.value) { //If turn
+		stopValue = stopSlot.value.toLowerCase();
+		stop = stops[stopValue];
+		if (stop) {
+			speechOutput = { //Checks if turn is in list
+				speech: stop, //Output the turn sentence from it's list.
+				type: skillSetup.speechOutputType.PLAIN_TEXT
+			};
+			repromptOutput = {
+				speech: "What else can I help with?",
+				type: skillSetup.speechOutputType.PLAIN_TEXT
+			};
+			cardContent =  stop;
+			//Here, I store the stop information into a message and I send it to PubHub.
+			var stopMessage = {
+					"type":"stop",
+					"command":stopValue
+				};
+			console.log(iotCloud.get_version());
+			iotCloud.publish({ //Publishes the stop message to my PubHub Device.
+				channel   : "my_device",
+				message   : stopMessage,
+				callback  : function(e) { 
+					console.log( "SUCCESS!", e ); 
+					response.askWithCard(speechOutput, repromptSpeech, cardTitle, cardContent);
+					},
+				error     : function(e) { 
+					response.tellWithCard("Could not connect", "Raspberry Pi Car", "Could not connect");
+					console.log( "FAILED! RETRY PUBLISH!", e ); }
+			});
+		} else { //Turn is not in list
+			handleNoSlotRequest(response);
+		}
+	}
+}
+
+function handleStopCarRequest(intent, session, response){ //Stop car function ONEND
 	
-	repromptSpeech = "What else can I help with?";	
-	speechOutput = "The car is now stoping. " + repromptSpeech;
-	response.ask(speechOutput, repromptSpeech);
+	//Here, I store the stop information into a message and I send it to PubHub.
+	var stopMessage = {
+			"type":"end",
+			"command":"stop"
+	};
+	console.log(iotCloud.get_version());
+	iotCloud.publish({ //Publishes the stop message to my PubHub Device.
+		channel   : "my_device",
+		message   : stopMessage,
+		callback  : function(e) { 
+			console.log( "SUCCESS!", e ); 
+			},
+		error     : function(e) { 
+			response.tellWithCard("Could not connect", "Raspberry Pi Car", "Could not connect");
+			console.log( "FAILED! RETRY PUBLISH!", e ); }
+	});
 }
 
 function handleAvailableDirectionsRequest(response) { //Available Directions Function
@@ -258,15 +347,6 @@ function handleAvailableDirectionsRequest(response) { //Available Directions Fun
 		
 	speechOutput = "You can pick from any of these directions: " + getAllDirectionsText();
 	repromptSpeech = "You can pick a direction now or do something else.";
-	response.ask(speechOutput, repromptSpeech);
-}
-
-function handleAvailableSpeedsRequest(response) { //Available Speeds Function
-	var repromptSpeech,
-        speechOutput;
-		
-	speechOutput = "You can pick from any of these speeds: " + getAllSpeedsText();
-	repromptSpeech = "You can pick a speed now or do something else.";
 	response.ask(speechOutput, repromptSpeech);
 }
 
@@ -285,6 +365,16 @@ function handleAvailableTurnsRequest(response) { //Available Turns Function
 		
 	speechOutput = "You can pick from any of these turns: " + getAllTurnsText();
 	repromptSpeech = "You can pick a turn now or do something else.";
+	response.ask(speechOutput, repromptSpeech);
+}
+
+function handleGetSessionIDRequest(session, response) {
+	var repromptSpeech,
+        speechOutput = {
+			type: skillSetup.speechOutputType.SSML,
+			speech: "<speak><say-as interpret-as='spell-out'>"+ session.sessionId+"</say-as></speak>"
+		};
+	repromptSpeech = "When you are connected, you can ask me commands to control the car";
 	response.ask(speechOutput, repromptSpeech);
 }
 

@@ -8,10 +8,6 @@
 					"type": "LIST_OF_DIRECTIONS"
 				},
 				{
-					"name": "Speed",
-					"type": "LIST_OF_SPEEDS"
-				},
-				{
 					"name": "Turn",
 					"type": "LIST_OF_TURNS"
 				}
@@ -27,7 +23,13 @@
 			]
 		},
 		{
-			"intent": "StopCarIntent"
+			"intent": "StopCarIntent",
+			"slots": [
+				{
+					"name": "stop",
+					"type": "STOP"
+				}
+			]
 		},
 		{
 			"intent": "SupportedSpeedsIntent"
@@ -40,6 +42,9 @@
 		},
 		{
 			"intent": "SupportedColorsIntent"
+		},
+		{
+			"intent": "GetSessionIDIntent"
 		},
 		{
 			"intent": "AMAZON.HelpIntent"
