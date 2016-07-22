@@ -27,18 +27,26 @@ You will need the following materials for both of the installation methods:
 
 ## Installation
 ### Raspberry Pi
-1: Download this bash file and put into your Raspberry Pi's home directory: 
+1: Disable boot to Desktop. You will find this option in "sudo raspi-config"
+2: Reboot your Raspberry Pi
+3: Run updates:
 ```
-/home/pi
+sudo apt-get update
+sudo apt-get upgrade
 ```
-2: Make it executable:
+4: Reboot your Raspberry Pi
+5: Install PubNub:
 ```
-sudo chmod 777 raspberryCarInstall.sh
+sudo pip install pubnub
 ```
-3: Run the script:
+6: Download ArduinoControl.py and run it:
 ```
-sudo ./raspberryCarInstall.sh
+sudo ArduinoControl.py
 ```
+7: Enter in your Session ID that was assinged to you by Alexa.
+* If you would like to self-host the code, you need to PubNub's website, create an account, and create a device. Put the keys into index.js in the Alexa Skill and in ArduinoControl.py in the Raspberry Pi.
+
+
 That's it! After your Raspberry Pi reboots, it will prompt you for your usage key and remind you to plug in both your Arduino and your Servo.
 
 ### Arduino
