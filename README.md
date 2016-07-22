@@ -22,12 +22,11 @@ You will need the following materials for both of the installation methods:
 * DC Motor (I used an old K'nex motor)
 * Servo
 * Portable Smartphone Charger (This is optional and is only used to power the Raspberry Pi)
-* A way to talk to Alexa (Seperate Raspberry Pi, Echo. Ect.)
+* A way to talk to Alexa (Seperate Raspberry Pi, Echo. ect.)
 * A way to access the Alexa Mobile App
 
 ## Installation
-### Simple
-#### Raspberry Pi
+### Raspberry Pi
 1: Download this bash file and put into your Raspberry Pi's home directory: 
 ```
 /home/pi
@@ -42,12 +41,20 @@ sudo ./raspberryCarInstall.sh
 ```
 That's it! After your Raspberry Pi reboots, it will prompt you for your usage key and remind you to plug in both your Arduino and your Servo.
 
-#### Arduino
+### Arduino
 1. Attach you SeeedStudio Motor Shield to your Arduino UNO
 2. Load up the Arduino application on any computer and upload this code to you Arduino UNO.
+  * NOTE: I used a COMMON ANODE LED STRIP which had build-in resistors. Please look up how to connect your LED STRIP to your Arduino, before you attempt doing what the schematic says. If you will be using COMMON CATHODE LEDs, you will need to open the Arduino code and comment out the line that contains:
+```C++
+#define COMMON_ANODE
+```
 
-#### Wiring
+### Wiring
 Please refer to the following schematic to wire everything up:
+![](RaspberryPiArduinoControl/Wiring%20Schematics_bb.png)
 
-[[https://github.com/username/repository/blob/master/img/octocat.png|alt=octocat]]
-### Advanced
+NOTE: I used a COMMON ANODE LED STRIP which had build-in resistors. Please look up how to connect your LED STRIP to your Arduino, before you attempt doing what the schematic says. If you will be using COMMON CATHODE LEDs, you will need to open the Arduino code and comment out the line that contains:
+```C++
+#define COMMON_ANODE
+```
+
