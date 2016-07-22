@@ -13,11 +13,14 @@ var stops = require('./stop');
 //PubHub server infromation (This is how i send the information to the Raspberry Pi)
 var iotCloud = require("pubnub")({
   ssl           : true,  // <- enable TLS Tunneling over TCP 
-  publish_key   : "pub-c-0ba1d27d-852a-4884-a4f7-007874c4c3c3",
+  publish_key   : "pub-c-0ba1d27d-852a-4884-a4f7-007874c4c3c3", //If you want to host this yourself, this is where your publish_key and subscribe_key will go.
   subscribe_key : "sub-c-cbf2cabc-4ce9-11e6-a1d5-0619f8945a4f"
 });
 
-var APP_ID = undefined //'amzn1.echo-sdk-ams.app.6e1ee6be-a692-407e-8373-f978b7314f18'; //Points to my Alexa Skill
+//var myChannel = "my_device" UNCOMMENT if you are hosting this yourself.
+var myChannel = Math.floor(Math.random()*90000000) + 10000000;
+
+var APP_ID = undefined
 
 var CarControl = function () {
     skillSetup.call(this, APP_ID);
@@ -75,7 +78,7 @@ CarControl.prototype.intentHandlers = {
                     };
                 console.log(iotCloud.get_version());
                 iotCloud.publish({ //Publishes the turn message to my PubHub Device.
-                    channel   : "my_device",
+                    channel   : myChannel,
                     message   : turnMessage,
                     callback  : function(e) { 
                         console.log( "SUCCESS!", e ); 
@@ -116,7 +119,7 @@ CarControl.prototype.intentHandlers = {
                     };
                 console.log(iotCloud.get_version());
                 iotCloud.publish({ //Publishes the direction message to my PubHub Device.
-                    channel   : "my_device",
+                    channel   : myChannel,
 					message   : directionMessage,
                     callback  : function(e) { 
                         console.log( "SUCCESS!", e ); 
@@ -171,7 +174,7 @@ CarControl.prototype.intentHandlers = {
                     };
                 console.log(iotCloud.get_version());
                 iotCloud.publish({ //Publishes the color message to my PubHub Device.
-                    channel   : "my_device",
+                    channel   : myChannel,
 					message   : colorMessage,
                     callback  : function(e) { 
                         console.log( "SUCCESS!", e ); 
@@ -221,12 +224,6 @@ CarControl.prototype.intentHandlers = {
         handleHelpRequest(response); //Run Help
     },
 
-    "AMAZON.StopIntent": function (intent, session, response) { //End Program
-        var speechOutput = "Goodbye";
-        response.tell(speechOutput);
-		handleStopCarOnEndRequest(intent, session, response); //Stop Car
-    },
-
     "AMAZON.CancelIntent": function (intent, session, response) { //End Program
         var speechOutput = "Goodbye";
 		response.tell(speechOutput);
@@ -241,7 +238,7 @@ function handleWelcomeRequest(session, response) {
 		+ "You will need it to start the Raspberry Pi application. "
 		+ repromptSpeech + " What would you like me to do?";
 		cardTitle = "Welcome to the Raspberry Pi Voice Controled Car!";
-		cardContent = "Session ID = " + session.sessionId;
+		cardContent = "Session ID = " + myChannel;
     response.askWithCard(speechOutput, repromptSpeech, cardTitle, cardContent);
 }
 
@@ -305,7 +302,7 @@ function handleStopCarRequest(intent, session, response){ //Stop car function
 				};
 			console.log(iotCloud.get_version());
 			iotCloud.publish({ //Publishes the stop message to my PubHub Device.
-				channel   : "my_device",
+				channel   : myChannel,
 				message   : stopMessage,
 				callback  : function(e) { 
 					console.log( "SUCCESS!", e ); 
@@ -315,7 +312,7 @@ function handleStopCarRequest(intent, session, response){ //Stop car function
 					response.tellWithCard("Could not connect", "Raspberry Pi Car", "Could not connect");
 					console.log( "FAILED! RETRY PUBLISH!", e ); }
 			});
-		} else { //Turn is not in list
+		} else {
 			handleNoSlotRequest(response);
 		}
 	}
@@ -326,11 +323,11 @@ function handleStopCarRequest(intent, session, response){ //Stop car function ON
 	//Here, I store the stop information into a message and I send it to PubHub.
 	var stopMessage = {
 			"type":"end",
-			"command":"stop"
+			"command":"end"
 	};
 	console.log(iotCloud.get_version());
 	iotCloud.publish({ //Publishes the stop message to my PubHub Device.
-		channel   : "my_device",
+		channel   : myChannel,
 		message   : stopMessage,
 		callback  : function(e) { 
 			console.log( "SUCCESS!", e ); 
@@ -372,7 +369,7 @@ function handleGetSessionIDRequest(session, response) {
 	var repromptSpeech,
         speechOutput = {
 			type: skillSetup.speechOutputType.SSML,
-			speech: "<speak><say-as interpret-as='spell-out'>"+ session.sessionId+"</say-as></speak>"
+			speech: "<speak><say-as interpret-as='spell-out'>"+ myChannel +"</say-as></speak>"
 		};
 	repromptSpeech = "When you are connected, you can ask me commands to control the car";
 	response.ask(speechOutput, repromptSpeech);
@@ -394,15 +391,6 @@ function getAllTurnsText() { //Get turns from list
     }
 
     return turnList;
-}
-
-function getAllSpeedsText() { //Get speeds from list
-    var speedList = '';
-    for (var speed in speeds) {
-        speedList += speed + ", ";
-    }
-
-    return speedList;
 }
 
 function getAllDirectionsText() { //Get directions from list
