@@ -61,15 +61,10 @@ CarControl.prototype.intentHandlers = {
 		if (turnSlot && turnSlot.value) { //If turn
 			turnValue = turnSlot.value.toLowerCase();
 			turn = turns[turnValue];
-			if (turn) {
-				speechOutput = { //Checks if turn is in list
-					speech: turn, //Output the turn sentence from it's list.
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				repromptOutput = {
-					speech: "What else can I help with?",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
+			if (turn) { //Checks if turn is in list
+				repromptOutput = " What's next?";
+				speechOutput = turn + repromptOutput; //Output the turn sentence from it's list.
+
 				cardContent =  turn;
 				//Here, I store the turn information into a message and I send it to PubHub.
 				var turnMessage = {
@@ -85,32 +80,22 @@ CarControl.prototype.intentHandlers = {
                         response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
                         },
                     error     : function(e) { 
-                        response.tellWithCard("Could not connect", "Raspberry Pi Car", "Could not connect");
+                        response.tellWithCard("Could not connect", "Toy Car", "Could not connect");
                         console.log( "FAILED! RETRY PUBLISH!", e ); }
                 });
 			} else { //Turn is not in list
-				speechOutput = {
-					speech: "I'm sorry, I cannot set the turn to that. For a list of valid turns, try, what are the available turns.",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				repromptOutput = {
-					speech: "What else can I help with?",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
+				repromptOutput = " What's next?";
+				speechOutput = "I'm sorry, I cannot set the turn to that. For a list of valid turns, try, what are the available turns." + repromptOutput;
+									
 				response.ask(speechOutput, repromptOutput);
 			}
         } else if (directionSlot && directionSlot.value) { //If direction
 			directionValue = directionSlot.value.toLowerCase();
 			direction = directions[directionValue];
 			if (direction) { //Check if direction is in list
-				speechOutput = {
-					speech: direction, //Output the direction sentence from it's list.
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				repromptOutput = {
-					speech: "What else can I help with?",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
+				repromptOutput = " Whats next?";
+				speechOutput = direction + repromptOutput ; //Output the direction sentence from it's list.
+					
 				cardContent =  direction;
 				//Here, I store the direction information into a message and I send it to PubHub.
 				var directionMessage = {
@@ -130,14 +115,9 @@ CarControl.prototype.intentHandlers = {
                         console.log( "FAILED! RETRY PUBLISH!", e ); }
                 });
 			} else { //Direction is not in list
-				speechOutput = {
-					speech: "I'm sorry, I cannot set the direction to that. For a list of valid directions, try, what are the available directions.",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				repromptOutput = {
-					speech: "What else can I help with?",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
+				repromptOutput = " What's next?";
+				speechOutput = "I'm sorry, I cannot set the direction to that. For a list of valid directions, try, what are the available directions." + repromptOutput;
+					
 				response.ask(speechOutput, repromptOutput);
 			}
         } else { //If error
@@ -158,14 +138,9 @@ CarControl.prototype.intentHandlers = {
             colorValue = colorSlot.value.toLowerCase();
 			color = colors[colorValue];
 			if (color) { //Check if color is in the list
-				speechOutput = {
-					speech: color, //Output the color sentence from it's list.
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				repromptOutput = {
-					speech: "What else can I help with?",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
+				repromptOutput = " Whats next?";
+				speechOutput = color + repromptOutput; //Output the color sentence from it's list.
+					
 				cardContent =  color;
 				//Here, I store the color information into a message and I send it to PubHub.
 				var colorMessage = {
@@ -185,14 +160,9 @@ CarControl.prototype.intentHandlers = {
                         console.log( "FAILED! RETRY PUBLISH!", e ); }
                 });
 			} else  { //Color is not in list
-				speechOutput = {
-					speech: "I'm sorry, I cannot set the car's lights to that. For a list of valid colors, try, what are the available colors.",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
-				repromptOutput = {
-					speech: "What else can I help with?",
-					type: skillSetup.speechOutputType.PLAIN_TEXT
-				};
+				repromptOutput = " Whats next?";
+				speechOutput =  "I'm sorry, I cannot set the car's lights to that. For a list of valid colors, try, what are the available colors." + repromptOutput;
+					
 				response.ask(speechOutput, repromptOutput);
 			}
 		} else { //If error
@@ -223,8 +193,14 @@ CarControl.prototype.intentHandlers = {
     "AMAZON.HelpIntent": function (intent, session, response) {
         handleHelpRequest(response); //Run Help
     },
+	
+	"AMAZON.StopIntent": function (intent, session, response) { //End Program from StopIntent
+        var speechOutput = "Goodbye";
+		response.tell(speechOutput);
+		handleStopCarOnEndRequest(intent, session, response); //Stop Car
+    },
 
-    "AMAZON.CancelIntent": function (intent, session, response) { //End Program
+    "AMAZON.CancelIntent": function (intent, session, response) { //End Program from CancelIntent
         var speechOutput = "Goodbye";
 		response.tell(speechOutput);
 		handleStopCarOnEndRequest(intent, session, response); //Stop Car
@@ -233,31 +209,29 @@ CarControl.prototype.intentHandlers = {
 
 function handleWelcomeRequest(session, response) {
 	var repromptSpeech = "For more instructions, please say help me.";
-    var speechOutput = "Welcome to the Raspberry Pi voice controlled car. "
+    var speechOutput = "Welcome to the voice controlled car. "
 		+ "Before we begin, please either refer to your alexa app for your session ID, or ask me for it. "
-		+ "You will need it to start the Raspberry Pi application. "
+		+ "You will need it to start the application on the car. "
 		+ repromptSpeech + " What would you like me to do?";
-		cardTitle = "Welcome to the Raspberry Pi Voice Controled Car!";
+		cardTitle = "Welcome to the Voice Controled Car!";
 		cardContent = "Session ID = " + myChannel;
     response.askWithCard(speechOutput, repromptSpeech, cardTitle, cardContent);
 }
 
 function handleHelpRequest(response) { //Help Function
     var repromptSpeech = "What would you like me to do?";
-    var speechOutput = "I can control a Raspberry Pi powered car. "
+    var speechOutput = "I can control a toy car. "
         + "To change the car's lights, say something like, change lights to blue. "
 		+ "For a list of valid colors, try, what are the available colors. "
         + "To change the car's direction, say something like, go straight. "
 		+ "For a list of valid directions, try, what are the available directions. "
-        + "To change the car's speed, say something like, change speed to fast. "
-		+ "For a list of valid speeds, try, what are the available speeds. "
 		+ "To turn the car, say something like, turn the car right. "
 		+ "For a list of valid turns, try, what are the available turns. "
 		+ "If you want the car to stop, say something like, stop car. "
         + "If you want to exit, say exit. "
         + repromptSpeech;
 	var cardContent = speechOutput;
-    response.askWithCard(speechOutput, repromptOutput, "Instuctions for Raspberry Pi Car:", cardContent);
+    response.askWithCard(speechOutput, repromptSpeech, "Instuctions for controlling the toy car:", cardContent);
 }
 
 function handleNoSlotRequest(response) { //Runs when invalid motion or color is given
@@ -282,18 +256,13 @@ function handleStopCarRequest(intent, session, response){ //Stop car function
 		cardTitle = "Car Stopped",
 		cardContent;
 
-	if (stopSlot && stopSlot.value) { //If turn
+	if (stopSlot && stopSlot.value) { //If stop
 		stopValue = stopSlot.value.toLowerCase();
 		stop = stops[stopValue];
-		if (stop) {
-			speechOutput = { //Checks if turn is in list
-				speech: stop, //Output the turn sentence from it's list.
-				type: skillSetup.speechOutputType.PLAIN_TEXT
-			};
-			repromptOutput = {
-				speech: "What else can I help with?",
-				type: skillSetup.speechOutputType.PLAIN_TEXT
-			};
+		if (stop) { //Checks if stop is in list
+			repromptOutput = " Whats next?";
+			speechOutput = stop + repromptOutput; //Output the stop sentence from it's list.
+			
 			cardContent =  stop;
 			//Here, I store the stop information into a message and I send it to PubHub.
 			var stopMessage = {
@@ -318,7 +287,7 @@ function handleStopCarRequest(intent, session, response){ //Stop car function
 	}
 }
 
-function handleStopCarRequest(intent, session, response){ //Stop car function ONEND
+function handleStopCarOnEndRequest(intent, session, response){ //Stop car function ONEND
 	
 	//Here, I store the stop information into a message and I send it to PubHub.
 	var stopMessage = {
@@ -342,8 +311,9 @@ function handleAvailableDirectionsRequest(response) { //Available Directions Fun
 	var repromptSpeech,
         speechOutput;
 		
-	speechOutput = "You can pick from any of these directions: " + getAllDirectionsText();
-	repromptSpeech = "You can pick a direction now or do something else.";
+	repromptSpeech = " You can pick a direction now or do something else.";
+	speechOutput = "You can pick from any of these directions: " + getAllDirectionsText() + repromptSpeech;
+	
 	response.ask(speechOutput, repromptSpeech);
 }
 
@@ -351,8 +321,9 @@ function handleAvailableColorsRequest(response) { //Available Colors Function
 	var repromptSpeech,
         speechOutput;
 		
-	speechOutput = "You can pick from any of these colors: " + getAllColorsText();
-	repromptSpeech = "You can pick a color now or do something else.";
+	repromptSpeech = " You can pick a color now or do something else.";
+	speechOutput = "You can pick from any of these colors: " + getAllColorsText() + repromptSpeech;
+	
 	response.ask(speechOutput, repromptSpeech);
 }
 
@@ -360,8 +331,9 @@ function handleAvailableTurnsRequest(response) { //Available Turns Function
 	var repromptSpeech,
         speechOutput;
 		
-	speechOutput = "You can pick from any of these turns: " + getAllTurnsText();
-	repromptSpeech = "You can pick a turn now or do something else.";
+	repromptSpeech = " You can pick a turn now or do something else.";
+	speechOutput = "You can pick from any of these turns: " + getAllTurnsText() + repromptSpeech;
+	
 	response.ask(speechOutput, repromptSpeech);
 }
 

@@ -2,9 +2,11 @@ CarLightColorIntent change light color to {Color}
 CarLightColorIntent change the car's lights to {Color}
 CarLightColorIntent make the car's lights {Color}
 CarLightColorIntent change lights to {Color}
+CarLightColorIntent turn the lights to {Color} 
 
 
 CarControlIntent go {Direction}
+CarControlIntent move the car {Direction}
 CarControlIntent drive the car {Direction}
 CarControlIntent make the car go {Direction}
 
@@ -27,35 +29,6 @@ StopCarIntent {stop} the car
 StopCarIntent {stop} the car now
 StopCarIntent make the car {stop}
 StopCarIntent make the car {stop} now
-
-
-SupportedSpeedsIntent supported speeds
-
-SupportedSpeedsIntent what are the supported speeds
-SupportedSpeedsIntent what are all the supported speeds
-SupportedSpeedsIntent what are all supported speeds
-
-SupportedSpeedsIntent tell me all the supported speeds
-SupportedSpeedsIntent tell me all supported speeds
-SupportedSpeedsIntent tell me the supported speeds
-
-SupportedSpeedsIntent list supported speeds
-SupportedSpeedsIntent list all supported speeds
-SupportedSpeedsIntent list me the supported speeds
-SupportedSpeedsIntent list me all supported speeds
-SupportedSpeedsIntent list me all the supported speeds
-SupportedSpeedsIntent list to me the supported speeds
-SupportedSpeedsIntent list to me all supported speeds
-SupportedSpeedsIntent list to me all the supported speeds
-
-SupportedSpeedsIntent give supported speeds
-SupportedSpeedsIntent give all supported speeds
-SupportedSpeedsIntent give me the supported speeds
-SupportedSpeedsIntent give me all supported speeds
-SupportedSpeedsIntent give me all the supported speeds
-SupportedSpeedsIntent give to me the supported speeds
-SupportedSpeedsIntent give to me all supported speeds
-SupportedSpeedsIntent give to me all the supported speeds
 
 
 SupportedDirectionsIntent supported directions
