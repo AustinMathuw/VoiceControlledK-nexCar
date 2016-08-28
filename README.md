@@ -27,6 +27,9 @@ You will need the following materials for both of the installation methods:
 
 ## Installation
 ### Raspberry Pi
+#### Simple
+1: Flash 
+#### Advanced
 1: Disable boot to Desktop. You will find this option in "sudo raspi-config"
 2: Reboot your Raspberry Pi
 3: Run updates:
