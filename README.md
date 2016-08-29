@@ -30,6 +30,7 @@ You will need the following materials for installation:
 * A way to talk to Alexa (Seperate Raspberry Pi, Echo, ect.)
 * A way to access the Alexa Mobile App
 * If using a Raspberry Pi 2, you will need a wifi chip
+* Assorted K'nex
 
 ## Installation
 ### Raspberry Pi
