@@ -11,8 +11,13 @@ When the Skill has processed the information, Alexa sends it's response back to 
 After that, the Raspberry Pi sends the commands to the Arduino via Serial Communication.
 
 ## Materials Needed
-You will need the following materials for both of the installation methods:
-* A set up Raspberry Pi Model B (2 or 3) with Raspbian Jessie installed.
+You will need the following materials for installation:
+* A Raspberry Pi Model B (2 or 3)
+* A 16 GB micro SD card
+* Keyboard
+* Mouse
+* Monitor
+* HDMI cord
 * Internet connection
 * Arduino Uno
 * SeeedStudio Motor Shield for Arduino
@@ -22,14 +27,40 @@ You will need the following materials for both of the installation methods:
 * DC Motor (I used an old K'nex motor)
 * Servo
 * Portable Smartphone Charger (This is optional and is only used to power the Raspberry Pi)
-* A way to talk to Alexa (Seperate Raspberry Pi, Echo. ect.)
+* A way to talk to Alexa (Seperate Raspberry Pi, Echo, ect.)
 * A way to access the Alexa Mobile App
+* If using a Raspberry Pi 2, you will need a wifi chip
 
 ## Installation
 ### Raspberry Pi
-#### Simple
-1: Flash 
+#### Simple (Preferred)
+1: Flash SD card with the image at this location:
+
+2: Insert SD card, HDMI cord, mouse, and keyboard into your Pi and boot the Pi up
+
+3: Now, you should be prompted to connect to wifi
+
+4: Press Ctrl+C
+
+5: Open the Desktop:
+```
+startx
+```
+
+6: Connect to wifi
+
+7: Reboot Pi
+
+8: When the Pi boots up, you should be prompted to enter your session ID. (This will appear in your Alexa app when you open the skill)
+
+9: After you press enter, you should see the following:
+
+10: Now you can unplug your HDMI cord, mouse, and keyboard
+
+Your Raspberry Pi is all set now!
+
 #### Advanced
+You will need to flash Jessie to the SD card before setup.
 1: Disable boot to Desktop. You will find this option in "sudo raspi-config"
 2: Reboot your Raspberry Pi
 3: Run updates:
@@ -44,13 +75,13 @@ sudo pip install pubnub
 ```
 6: Download ArduinoControl.py and run it:
 ```
-sudo ArduinoControl.py
+sudo python ArduinoControl.py
 ```
 7: Enter in your Session ID that was assinged to you by Alexa.
 * If you would like to self-host the code, you need to PubNub's website, create an account, and create a device. Put the keys into index.js in the Alexa Skill and in ArduinoControl.py in the Raspberry Pi.
 
 
-That's it! After your Raspberry Pi reboots, it will prompt you for your usage key and remind you to plug in both your Arduino and your Servo.
+That's it! After your Raspberry Pi reboots, it will prompt you for your session ID. (This will appear in your Alexa app when you open the skill)
 
 ### Arduino
 1. Attach you SeeedStudio Motor Shield to your Arduino UNO
@@ -68,4 +99,10 @@ NOTE: I used a COMMON ANODE LED STRIP which had build-in resistors. Please look 
 ```C++
 #define COMMON_ANODE
 ```
+
+### Vehicle
+You may use any design you like, just as long as you are sure that you can properly mount all of the hardware.
+
+##Running the app
+After the setup is completed, open the Alexa Skill and type in your session ID. Once all is good, you can try asking alexa to "change lights to green". After Alexa process your request, she should send you a reply and the lights should be green.
 
