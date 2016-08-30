@@ -2,7 +2,7 @@ CarLightColorIntent change light color to {Color}
 CarLightColorIntent change the car's lights to {Color}
 CarLightColorIntent make the car's lights {Color}
 CarLightColorIntent change lights to {Color}
-CarLightColorIntent turn the lights to {Color} 
+CarLightColorIntent turn the lights to {Color}
 
 
 CarControlIntent go {Direction}
