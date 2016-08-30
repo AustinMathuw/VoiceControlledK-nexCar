@@ -32,9 +32,6 @@
 			]
 		},
 		{
-			"intent": "SupportedSpeedsIntent"
-		},
-		{
 			"intent": "SupportedDirectionsIntent"
 		},
      	{
