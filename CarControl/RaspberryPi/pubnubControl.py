@@ -4,7 +4,7 @@
 #Import packages from PubHub
 from pubnub import Pubnub
 
-#Setup Serial communication between Arduino and Rspberry Pi
+#Setup Serial communication between Arduino and Raspberry Pi
 import serial
 
 import RPi.GPIO as GPIO
@@ -13,7 +13,7 @@ import sys
 
 ser = serial.Serial('/dev/ttyACM0', 9600)
 
-#Point to the PubHub Device
+#Point to the PubNub Device
 pubnub = Pubnub(publish_key="pub-c-0ba1d27d-852a-4884-a4f7-007874c4c3c3", subscribe_key="sub-c-cbf2cabc-4ce9-11e6-a1d5-0619f8945a4f", ssl_on=False) #UPDATE WITH YOUR INFORMATION IF YOU ARE SELF HOSTING
 
 #Set user's channel to their sessionID

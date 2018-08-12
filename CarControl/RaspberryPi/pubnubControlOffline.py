@@ -1,7 +1,7 @@
 #Raspberry Pi controlled Car (via Arduino) OFFLINE
 #Author: Austin Wilson
 
-#Setup Serial communication between Arduino and Rspberry Pi
+#Setup Serial communication between Arduino and Raspberry Pi
 import serial
 
 import time

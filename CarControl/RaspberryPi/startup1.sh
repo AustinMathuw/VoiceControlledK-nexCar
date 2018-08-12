@@ -8,7 +8,8 @@ echo ""
 sudo wget -q --tries=10 --timeout=20 --spider http://google.com
 
 if [ $? -eq 0 ]; then
-	sudo python pubnubControlTest.py
+	sudo python pubnubControl.py
 else
 	echo "Please connect to the internet, then reboot."
+	sudo python pubnubControlOffline.py
 fi
