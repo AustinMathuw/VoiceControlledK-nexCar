@@ -17,9 +17,8 @@ ser = serial.Serial('/dev/ttyACM0', 9600)
 pubnub = Pubnub(publish_key="pub-c-0ba1d27d-852a-4884-a4f7-007874c4c3c3", subscribe_key="sub-c-cbf2cabc-4ce9-11e6-a1d5-0619f8945a4f", ssl_on=False) #UPDATE WITH YOUR INFORMATION IF YOU ARE SELF HOSTING
 
 #Set user's channel to their sessionID
-channel = raw_input('Please Enter your session ID: ')
-#channel = "my_device" UNCOMMENT IF YOU ARE HOSTING YOURSELF
-
+#channel = raw_input('Please Enter your session ID: ')
+channel = "my_deviceAustinMath"
 #Prepare Servo Control
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.OUT)
@@ -46,9 +45,9 @@ def callback(message, channel):
 			print("Not a valid turn")	
 	elif type == "direction":
 		if command == "forward" or command == "straight":
-                        ser.write('0')
-                elif command == "backward" or command == "reverse" or command == "back":
                         ser.write('1')
+                elif command == "backward" or command == "reverse" or command == "back":
+                        ser.write('0')
                 else:          
                         print("Not a valid direction")
 	elif type == "color":
@@ -81,6 +80,8 @@ def error(message):
 
 def connect(message):
 	print("CONNECTED")
+	ser.write('4')
+	print("Done")
 
 
 def reconnect(message):
