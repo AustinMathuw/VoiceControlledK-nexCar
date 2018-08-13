@@ -9,8 +9,11 @@ import sys
 
 ser = serial.Serial('/dev/ttyACM0', 9600)
 
-while True:
-	ser.write('3')
-	time.sleep(1)
-	ser.write('4')
-	time.sleep(1)
+def offlineLoop(serIn):
+	while True:
+		ser.write('3')
+		time.sleep(1)
+		ser.write('4')
+		time.sleep(1)
+
+offlineLoop(ser)

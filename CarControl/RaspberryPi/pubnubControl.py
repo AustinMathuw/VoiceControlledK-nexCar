@@ -6,10 +6,11 @@ from pubnub import Pubnub
 
 #Setup Serial communication between Arduino and Raspberry Pi
 import serial
-
+import RobotPackage
 import RPi.GPIO as GPIO
 import time
 import sys
+import pubnubControlOffline
 
 ser = serial.Serial('/dev/ttyACM0', 9600)
 
@@ -26,6 +27,11 @@ pwm = GPIO.PWM(18, 100)
 pwm.start(5)
 pwm.ChangeDutyCycle(7.5)
 duty = 7.5
+
+#Prepare Drive Motor Control
+LEFT_TRIM = 0
+RIGHT_TRIM = 0
+robot = RobotPackage.Robot(left_trim=LEFT_TRIM, right_trim=RIGHT_TRIM)
 
 def callback(message, channel):
 	global duty	
@@ -45,9 +51,9 @@ def callback(message, channel):
 			print("Not a valid turn")	
 	elif type == "direction":
 		if command == "forward" or command == "straight":
-                        ser.write('1')
+                        robot.forward(150)
                 elif command == "backward" or command == "reverse" or command == "back":
-                        ser.write('0')
+                        robot.backward(150)
                 else:          
                         print("Not a valid direction")
 	elif type == "color":
@@ -65,7 +71,7 @@ def callback(message, channel):
                         print("Not a valid color") 
 	elif type == "stop":
                 if command == "stop":
-                        ser.write('7')
+                        robot.stop()
                 else:
                         print("Not a valid stop")
 	elif type == "end":
@@ -80,6 +86,7 @@ def error(message):
 
 def connect(message):
 	print("CONNECTED")
+	time.sleep(4)
 	ser.write('4')
 	print("Done")
 
@@ -90,6 +97,8 @@ def reconnect(message):
 
 def disconnect(message):
 	print("DISCONNECTED")
+	robot.stop()
+	pubnubControlOffline.offlineLoop(ser)
 
 
 pubnub.subscribe(channels=channel, callback=callback, error=error,
